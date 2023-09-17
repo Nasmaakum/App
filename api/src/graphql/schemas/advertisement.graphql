@@ -1,0 +1,87 @@
+extend type Query {
+	advertisement(where: AdvertisementWhereUniqueInput!): Advertisement
+	advertisements(
+		where: AdvertisementWhereInput = {}
+		orderBy: [AdvertisementOrderByInput!] = [{ createdAt: "desc" }]
+		take: Int = 10
+		skip: Int = 0
+	): [Advertisement!]!
+	advertisementsCount(where: AdvertisementWhereInput = {}): Int!
+	activeAdvertisements: [Advertisement!]!
+}
+
+extend type Mutation {
+	createAdvertisement(data: AdvertisementCreateInput!): Advertisement!
+	updateAdvertisement(where: AdvertisementWhereUniqueInput!, data: AdvertisementUpdateInput!): Advertisement!
+	deleteAdvertisement(where: AdvertisementWhereUniqueInput!): Advertisement!
+
+	activateAdvertisement(where: AdvertisementWhereUniqueInput!): Advertisement!
+}
+
+type Advertisement {
+	id: ID!
+
+	title: String!
+	titleEn: String!
+	titleAr: String
+
+	content: String!
+	contentEn: String!
+	contentAr: String
+
+	image: String!
+	url: String
+	duration: Int!
+	active: Boolean!
+	views: Int!
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+input AdvertisementWhereUniqueInput {
+	id: ID
+}
+
+input AdvertisementWhereInput {
+	AND: [AdvertisementWhereInput!]
+	OR: [AdvertisementWhereInput!]
+	NOT: [AdvertisementWhereInput!]
+	id: IDFilter
+}
+
+input AdvertisementCreateInput {
+	titleEn: String!
+	titleAr: String
+
+	contentEn: String!
+	contentAr: String
+
+	image: Upload!
+	url: String!
+	duration: Int!
+	active: Boolean!
+}
+
+input AdvertisementUpdateInput {
+	titleEn: String
+	titleAr: String
+
+	contentEn: String
+	contentAr: String
+
+	image: Upload
+	url: String
+	duration: Int
+	active: Boolean
+}
+
+input AdvertisementOrderByInput {
+	id: OrderDirection
+
+	views: OrderDirection
+	active: OrderDirection
+	duration: OrderDirection
+
+	createdAt: OrderDirection
+}

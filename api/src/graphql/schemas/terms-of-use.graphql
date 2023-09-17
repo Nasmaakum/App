@@ -1,0 +1,68 @@
+extend type Query {
+	latestTermsOfUse: TermsOfUse!
+	termsOfUse(where: TermsOfUseWhereUniqueInput!): TermsOfUse!
+	termsOfUses(
+		where: TermsOfUseWhereInput = {}
+		orderBy: [TermsOfUseOrderByInput!] = [{ createdAt: "desc" }]
+		take: Int = 10
+		skip: Int = 0
+	): [TermsOfUse!]!
+	termsOfUsesCount(where: TermsOfUseWhereInput = {}): Int!
+}
+
+extend type Mutation {
+	createTermsOfUse(data: TermsOfUseCreateInput!): TermsOfUse!
+	updateTermsOfUse(where: TermsOfUseWhereUniqueInput!, data: TermsOfUseUpdateInput!): TermsOfUse!
+	deleteTermsOfUse(where: TermsOfUseWhereUniqueInput!): TermsOfUse!
+	acceptTermsOfUse(where: TermsOfUseWhereUniqueInput!): TermsOfUseAcceptance!
+}
+
+type TermsOfUseAcceptance {
+	id: ID!
+
+	termsOfUse: TermsOfUse!
+	user: User!
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+type TermsOfUse {
+	id: ID!
+
+	content: String!
+	contentEn: String!
+	contentAr: String
+
+	version: Int!
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+input TermsOfUseWhereUniqueInput {
+	id: ID
+}
+
+input TermsOfUseWhereInput {
+	AND: [TermsOfUseWhereInput!]
+	OR: [TermsOfUseWhereInput!]
+	NOT: [TermsOfUseWhereInput!]
+	id: IDFilter
+}
+
+input TermsOfUseCreateInput {
+	contentEn: String!
+	contentAr: String!
+}
+
+input TermsOfUseUpdateInput {
+	contentEn: String
+	contentAr: String
+}
+
+input TermsOfUseOrderByInput {
+	id: OrderDirection
+
+	createdAt: OrderDirection
+}

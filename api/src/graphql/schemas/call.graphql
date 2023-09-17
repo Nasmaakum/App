@@ -1,0 +1,88 @@
+extend type Query {
+	call(where: CallWhereUniqueInput!): Call!
+	calls(
+		where: CallWhereInput = {}
+		orderBy: [CallOrderByInput!] = [{ createdAt: "desc" }]
+		take: Int = 10
+		skip: Int = 0
+	): [Call!]!
+	callsCount(where: CallWhereInput = {}): Int!
+	outboundNumber: String!
+}
+
+extend type Mutation {
+	activeCall: Call
+	startCall(where: StartCallWhereInput!): Call!
+	endCall: Call!
+	keepCallAlive(where: KeepCallAliveWhereInput!, data: KeepCallAliveData!): Call!
+	answerCall: Call!
+	rejectCall: Call!
+	connectService(data: ConnectServiceInput!): Call!
+	disconnectService: Call!
+}
+
+enum CallStatus {
+	CALLING
+	ANSWERED
+	FAILED
+	ENDED
+	REJECTED
+}
+
+type Call {
+	id: ID!
+
+	from: User!
+	to: Interpreter!
+
+	token: String
+
+	status: CallStatus!
+
+	service: Service
+
+	startedAt: Date
+	endedAt: Date
+	serviceCalledAt: Date
+	serviceEndedAt: Date
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+input CallWhereUniqueInput {
+	id: ID
+}
+
+input CallWhereInput {
+	AND: [CallWhereInput!]
+	OR: [CallWhereInput!]
+	NOT: [CallWhereInput!]
+	id: IDFilter
+}
+
+input StartCallWhereInput {
+	id: ID!
+}
+
+input KeepCallAliveWhereInput {
+	id: ID!
+}
+
+input KeepCallAliveData {
+	getToken: Boolean
+}
+
+input EndCallInput {
+	id: ID!
+}
+
+input CallOrderByInput {
+	id: OrderDirection
+
+	createdAt: OrderDirection
+}
+
+input ConnectServiceInput {
+	id: ID!
+}

@@ -1,0 +1,82 @@
+extend type Query {
+	interpreter(where: InterpreterWhereUniqueInput!): Interpreter!
+	interpreters(
+		where: InterpreterWhereInput = {}
+		orderBy: [InterpreterOrderByInput!] = [{ createdAt: "desc" }]
+		take: Int = 10
+		skip: Int = 0
+	): [Interpreter!]!
+	interpretersCount(where: InterpreterWhereInput = {}): Int!
+	myAvailability: Boolean!
+}
+
+extend type Mutation {
+	approveInterpreter(where: InterpreterWhereUniqueInput!): Interpreter!
+	rejectInterpreter(where: InterpreterWhereUniqueInput!): Interpreter!
+	updateInterpreter(where: InterpreterWhereUniqueInput!, data: InterpreterUpdateInput!): Interpreter!
+	updateMyInterpreter(data: MyInterpreterUpdateInput!): Interpreter!
+	toggleInterpreterAvailability: Boolean!
+	toggleFavoriteInterpreter(where: InterpreterWhereUniqueInput!): Boolean!
+}
+
+enum InterpreterStatus {
+	APPROVED
+	PENDING
+	REJECTED
+}
+
+type InterpreterUser {
+	id: ID!
+	firstName: String!
+	lastName: String!
+	fullName: String
+	image: String
+}
+
+type Interpreter {
+	id: ID!
+
+	languages: [String!]!
+	ratings: [InterpreterRating!]!
+	rating: Float!
+	user: InterpreterUser!
+
+	online: Boolean!
+	approved: Boolean!
+	status: InterpreterStatus!
+	isBusy: Boolean!
+
+	isFavorite: Boolean!
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+input InterpreterWhereUniqueInput {
+	id: ID
+}
+
+input InterpreterWhereInput {
+	AND: [InterpreterWhereInput!]
+	OR: [InterpreterWhereInput!]
+	NOT: [InterpreterWhereInput!]
+	id: IDFilter
+}
+
+input InterpreterUpdateInput {
+	languages: [String!]
+	status: InterpreterStatus
+}
+
+input MyInterpreterUpdateInput {
+	languages: [String!]
+}
+
+input InterpreterOrderByInput {
+	id: OrderDirection
+
+	approved: OrderDirection
+	online: OrderDirection
+
+	createdAt: OrderDirection
+}

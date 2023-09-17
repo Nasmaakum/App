@@ -1,0 +1,80 @@
+extend type Query {
+	login(data: LoginInput!): AuthenticationResponse!
+}
+
+extend type Mutation {
+	register(data: RegistrationInput!): MessageResponse!
+	verifyRegistration(data: VerifyRegistrationInput!): AuthenticationResponse!
+
+	requestPasswordReset(data: RequestPasswordResetInput!): MessageResponse!
+	verifyPasswordReset(data: VerifyPasswordResetInput!): MessageResponse!
+
+	resetPassword(data: ResetPasswordInput!): AuthenticationResponse!
+
+	changePassword(data: ChangePasswordInput!): MessageResponse!
+}
+
+type AuthenticationResponse {
+	authentication: Authentication
+	message: String
+}
+
+type Authentication {
+	user: User!
+	token: String!
+}
+
+input LoginInput {
+	email: EmailAddress!
+	password: String!
+}
+
+input CheckEmailInput {
+	email: EmailAddress!
+}
+
+input RegistrationInterpreterInput {
+	languages: [String!]!
+}
+
+input VerifyRegistrationInput {
+	email: EmailAddress!
+	code: OTP!
+}
+
+input RegistrationInput {
+	firstName: String!
+	lastName: String!
+	cpr: String!
+	email: EmailAddress!
+	dateOfBirth: Date!
+	language: String!
+	country: String!
+	city: String!
+	mobile: PhoneNumber!
+	gender: Gender!
+	password: Password!
+	interpreter: RegistrationInterpreterInput
+	acceptPrivacyPolicy: Boolean!
+	acceptTermsOfUse: Boolean!
+}
+
+input RequestPasswordResetInput {
+	email: EmailAddress!
+}
+
+input VerifyPasswordResetInput {
+	email: EmailAddress!
+	code: OTP!
+}
+
+input ResetPasswordInput {
+	code: OTP!
+	email: EmailAddress!
+	password: Password!
+}
+
+input ChangePasswordInput {
+	currentPassword: String!
+	newPassword: Password!
+}

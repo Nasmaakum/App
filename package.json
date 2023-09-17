@@ -1,0 +1,26 @@
+{
+	"name": "nasmaakum",
+	"version": "beta",
+	"repository": "https://github.com/InvitaCompany/nasmaakum.git",
+	"author": "InvitaCompany",
+	"license": "UNLICENSED",
+	"scripts": {
+		"postinstall": "patch-package"
+	},
+	"workspaces": [
+		"dashboard",
+		"api"
+	],
+	"private": true,
+	"dependencies": {
+		"patch-package": "^7.0.0"
+	},
+	"devDependencies": {
+		"@404-software/eslint-config": "^1.0.12",
+		"eslint": "^8.18.0",
+		"prettier": "^2.7.1"
+	},
+	"eslintConfig": {
+		"extends": "@404-software/eslint-config"
+	}
+}

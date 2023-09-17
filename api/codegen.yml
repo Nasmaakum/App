@@ -1,0 +1,46 @@
+overwrite: true
+schema: 'src/graphql/schemas/schema.graphql'
+documents: null
+generates:
+  ./src/gql-types.ts:
+    config:
+      scalars:
+        Null: null | undefined
+        NullableString: null | string
+        NullableNumber: null | number
+        NullableID: null | string
+        UntrimmedString: string
+        LowercaseString: string
+        UppercaseString: string
+        EmailAddress: string
+        Password: string
+        OTP: string
+        PhoneNumber: string
+        Date: Date
+      inputMaybeValue: T | undefined
+      contextType: ./context#Context
+      enumsAsTypes: true
+      mapperTypeSuffix: Model
+      mappers:
+        Call: '@prisma/client#Call'
+        User: '@prisma/client#User'
+        UserPreferences: '@prisma/client#UserPreferences'
+        Interpreter: '@prisma/client#Interpreter'
+        InterpreterRating: '@prisma/client#InterpreterRating'
+        InterpreterRatingOption: '@prisma/client#InterpreterRatingOption'
+        Notification: '@prisma/client#Notification'
+        Advertisement: '@prisma/client#Advertisement'
+        TermsOfUse: '@prisma/client#TermsOfUse'
+        TermsOfUseAcceptance: '@prisma/client#TermsOfUseAcceptance'
+        PrivacyPolicy: '@prisma/client#PrivacyPolicy'
+        PrivacyPolicyAcceptance: '@prisma/client#PrivacyPolicyAcceptance'
+        ExpoToken: '@prisma/client#ExpoToken'
+        Service: '@prisma/client#Service'
+        ServiceCategory: '@prisma/client#ServiceCategory'
+        FrequentlyAskedQuestion: '@prisma/client#FrequentlyAskedQuestion'
+        About: '@prisma/client#About'
+        OneTimePassword: '@prisma/client#OneTimePassword'
+        Config: '@prisma/client#Config'
+    plugins:
+      - typescript
+      - typescript-resolvers

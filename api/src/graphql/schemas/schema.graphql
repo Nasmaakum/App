@@ -1,0 +1,1275 @@
+extend type Query {
+	latestAbout: About!
+	about(where: AboutWhereUniqueInput!): About!
+	abouts(
+		where: AboutWhereInput = {}
+		orderBy: [AboutOrderByInput!] = [{ createdAt: "desc" }]
+		take: Int = 10
+		skip: Int = 0
+	): [About!]!
+	aboutsCount(where: AboutWhereInput = {}): Int!
+}
+
+extend type Mutation {
+	createAbout(data: AboutCreateInput!): About!
+	updateAbout(where: AboutWhereUniqueInput!, data: AboutUpdateInput!): About!
+	deleteAbout(where: AboutWhereUniqueInput!): About!
+}
+
+type About {
+	id: ID!
+
+	content: String
+	contentEn: String!
+	contentAr: String
+
+	version: Int!
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+input AboutWhereUniqueInput {
+	id: ID
+}
+
+input AboutWhereInput {
+	AND: [AboutWhereInput!]
+	OR: [AboutWhereInput!]
+	NOT: [AboutWhereInput!]
+	id: IDFilter
+}
+
+input AboutCreateInput {
+	contentEn: String!
+	contentAr: String
+}
+
+input AboutUpdateInput {
+	contentEn: String
+	contentAr: String
+}
+
+input AboutOrderByInput {
+	id: OrderDirection
+
+	createdAt: OrderDirection
+}
+
+extend type Query {
+	advertisement(where: AdvertisementWhereUniqueInput!): Advertisement
+	advertisements(
+		where: AdvertisementWhereInput = {}
+		orderBy: [AdvertisementOrderByInput!] = [{ createdAt: "desc" }]
+		take: Int = 10
+		skip: Int = 0
+	): [Advertisement!]!
+	advertisementsCount(where: AdvertisementWhereInput = {}): Int!
+	activeAdvertisements: [Advertisement!]!
+}
+
+extend type Mutation {
+	createAdvertisement(data: AdvertisementCreateInput!): Advertisement!
+	updateAdvertisement(where: AdvertisementWhereUniqueInput!, data: AdvertisementUpdateInput!): Advertisement!
+	deleteAdvertisement(where: AdvertisementWhereUniqueInput!): Advertisement!
+
+	activateAdvertisement(where: AdvertisementWhereUniqueInput!): Advertisement!
+}
+
+type Advertisement {
+	id: ID!
+
+	title: String!
+	titleEn: String!
+	titleAr: String
+
+	content: String!
+	contentEn: String!
+	contentAr: String
+
+	image: String!
+	url: String
+	duration: Int!
+	active: Boolean!
+	views: Int!
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+input AdvertisementWhereUniqueInput {
+	id: ID
+}
+
+input AdvertisementWhereInput {
+	AND: [AdvertisementWhereInput!]
+	OR: [AdvertisementWhereInput!]
+	NOT: [AdvertisementWhereInput!]
+	id: IDFilter
+}
+
+input AdvertisementCreateInput {
+	titleEn: String!
+	titleAr: String
+
+	contentEn: String!
+	contentAr: String
+
+	image: Upload!
+	url: String!
+	duration: Int!
+	active: Boolean!
+}
+
+input AdvertisementUpdateInput {
+	titleEn: String
+	titleAr: String
+
+	contentEn: String
+	contentAr: String
+
+	image: Upload
+	url: String
+	duration: Int
+	active: Boolean
+}
+
+input AdvertisementOrderByInput {
+	id: OrderDirection
+
+	views: OrderDirection
+	active: OrderDirection
+	duration: OrderDirection
+
+	createdAt: OrderDirection
+}
+
+extend type Query {
+	login(data: LoginInput!): AuthenticationResponse!
+}
+
+extend type Mutation {
+	register(data: RegistrationInput!): MessageResponse!
+	verifyRegistration(data: VerifyRegistrationInput!): AuthenticationResponse!
+
+	requestPasswordReset(data: RequestPasswordResetInput!): MessageResponse!
+	verifyPasswordReset(data: VerifyPasswordResetInput!): MessageResponse!
+
+	resetPassword(data: ResetPasswordInput!): AuthenticationResponse!
+
+	changePassword(data: ChangePasswordInput!): MessageResponse!
+}
+
+type AuthenticationResponse {
+	authentication: Authentication
+	message: String
+}
+
+type Authentication {
+	user: User!
+	token: String!
+}
+
+input LoginInput {
+	email: EmailAddress!
+	password: String!
+}
+
+input CheckEmailInput {
+	email: EmailAddress!
+}
+
+input RegistrationInterpreterInput {
+	languages: [String!]!
+}
+
+input VerifyRegistrationInput {
+	email: EmailAddress!
+	code: OTP!
+}
+
+input RegistrationInput {
+	firstName: String!
+	lastName: String!
+	cpr: String!
+	email: EmailAddress!
+	dateOfBirth: Date!
+	language: String!
+	country: String!
+	city: String!
+	mobile: PhoneNumber!
+	gender: Gender!
+	password: Password!
+	interpreter: RegistrationInterpreterInput
+	acceptPrivacyPolicy: Boolean!
+	acceptTermsOfUse: Boolean!
+}
+
+input RequestPasswordResetInput {
+	email: EmailAddress!
+}
+
+input VerifyPasswordResetInput {
+	email: EmailAddress!
+	code: OTP!
+}
+
+input ResetPasswordInput {
+	code: OTP!
+	email: EmailAddress!
+	password: Password!
+}
+
+input ChangePasswordInput {
+	currentPassword: String!
+	newPassword: Password!
+}
+
+extend type Query {
+	call(where: CallWhereUniqueInput!): Call!
+	calls(
+		where: CallWhereInput = {}
+		orderBy: [CallOrderByInput!] = [{ createdAt: "desc" }]
+		take: Int = 10
+		skip: Int = 0
+	): [Call!]!
+	callsCount(where: CallWhereInput = {}): Int!
+	outboundNumber: String!
+}
+
+extend type Mutation {
+	activeCall: Call
+	startCall(where: StartCallWhereInput!): Call!
+	endCall: Call!
+	keepCallAlive(where: KeepCallAliveWhereInput!, data: KeepCallAliveData!): Call!
+	answerCall: Call!
+	rejectCall: Call!
+	connectService(data: ConnectServiceInput!): Call!
+	disconnectService: Call!
+}
+
+enum CallStatus {
+	CALLING
+	ANSWERED
+	FAILED
+	ENDED
+	REJECTED
+}
+
+type Call {
+	id: ID!
+
+	from: User!
+	to: Interpreter!
+
+	token: String
+
+	status: CallStatus!
+
+	service: Service
+
+	startedAt: Date
+	endedAt: Date
+	serviceCalledAt: Date
+	serviceEndedAt: Date
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+input CallWhereUniqueInput {
+	id: ID
+}
+
+input CallWhereInput {
+	AND: [CallWhereInput!]
+	OR: [CallWhereInput!]
+	NOT: [CallWhereInput!]
+	id: IDFilter
+}
+
+input StartCallWhereInput {
+	id: ID!
+}
+
+input KeepCallAliveWhereInput {
+	id: ID!
+}
+
+input KeepCallAliveData {
+	getToken: Boolean
+}
+
+input EndCallInput {
+	id: ID!
+}
+
+input CallOrderByInput {
+	id: OrderDirection
+
+	createdAt: OrderDirection
+}
+
+input ConnectServiceInput {
+	id: ID!
+}
+
+type Query {
+	_empty: String
+}
+
+type Mutation {
+	_empty: String
+}
+
+input IDFilter {
+	equals: ID
+	in: [ID!]
+	notIn: [ID!]
+	lt: ID
+	lte: ID
+	gt: ID
+	gte: ID
+	not: IDFilter
+}
+
+input RelationshipNullableFilter {
+	id: ID
+	is: Null
+	isNot: Null
+}
+
+input ArrayNullableFilter {
+	equals: [String!]
+	hasSome: [String!]
+	hasEvery: [String!]
+	has: String
+	isEmpty: Boolean
+}
+
+input StringNullableFilter {
+	equals: String
+	in: [String!]
+	notIn: [String!]
+	lt: String
+	lte: String
+	gt: String
+	gte: String
+	contains: String
+	startsWith: String
+	endsWith: String
+	mode: QueryMode
+	not: NestedStringNullableFilter
+}
+
+input NestedStringNullableFilter {
+	equals: String
+	in: [String!]
+	notIn: [String!]
+	lt: String
+	lte: String
+	gt: String
+	gte: String
+	contains: String
+	startsWith: String
+	endsWith: String
+	not: NestedStringNullableFilter
+}
+
+input IntNullableFilter {
+	equals: Int
+	in: [Int!]
+	notIn: [Int!]
+	lt: Int
+	lte: Int
+	gt: Int
+	gte: Int
+	not: NestedIntNullableFilter
+}
+
+input NestedIntNullableFilter {
+	equals: Int
+	in: [Int!]
+	notIn: [Int!]
+	lt: Int
+	lte: Int
+	gt: Int
+	gte: Int
+	not: NestedIntNullableFilter
+}
+
+input FloatNullableFilter {
+	equals: Float
+	in: [Float!]
+	notIn: [Float!]
+	lt: Float
+	lte: Float
+	gt: Float
+	gte: Float
+	not: NestedFloatNullableFilter
+}
+
+input NestedFloatNullableFilter {
+	equals: Float
+	in: [Float!]
+	notIn: [Float!]
+	lt: Float
+	lte: Float
+	gt: Float
+	gte: Float
+	not: NestedFloatNullableFilter
+}
+
+enum QueryMode {
+	default
+	insensitive
+}
+
+enum OrderDirection {
+	asc
+	desc
+}
+
+type BatchPayload {
+	count: Int!
+}
+
+enum Gender {
+	MALE
+	FEMALE
+}
+
+type MessageResponse {
+	message: String!
+}
+
+extend type Query {
+	frequentlyAskedQuestion(where: FrequentlyAskedQuestionWhereUniqueInput!): FrequentlyAskedQuestion!
+	frequentlyAskedQuestions(
+		where: FrequentlyAskedQuestionWhereInput = {}
+		orderBy: [FrequentlyAskedQuestionOrderByInput!] = [{ createdAt: "desc" }]
+		take: Int = 10
+		skip: Int = 0
+	): [FrequentlyAskedQuestion!]!
+	frequentlyAskedQuestionsCount(where: FrequentlyAskedQuestionWhereInput = {}): Int!
+}
+
+extend type Mutation {
+	createFrequentlyAskedQuestion(data: FrequentlyAskedQuestionCreateInput!): FrequentlyAskedQuestion!
+	updateFrequentlyAskedQuestion(
+		where: FrequentlyAskedQuestionWhereUniqueInput!
+		data: FrequentlyAskedQuestionUpdateInput!
+	): FrequentlyAskedQuestion!
+	deleteFrequentlyAskedQuestion(where: FrequentlyAskedQuestionWhereUniqueInput!): FrequentlyAskedQuestion!
+}
+
+type FrequentlyAskedQuestion {
+	id: ID!
+
+	question: String!
+	questionEn: String!
+	questionAr: String
+
+	answer: String!
+	answerEn: String!
+	answerAr: String
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+input FrequentlyAskedQuestionWhereUniqueInput {
+	id: ID
+}
+
+input FrequentlyAskedQuestionWhereInput {
+	AND: [FrequentlyAskedQuestionWhereInput!]
+	OR: [FrequentlyAskedQuestionWhereInput!]
+	NOT: [FrequentlyAskedQuestionWhereInput!]
+	id: IDFilter
+}
+
+input FrequentlyAskedQuestionCreateInput {
+	questionEn: String!
+	questionAr: String
+
+	answerEn: String!
+	answerAr: String
+}
+
+input FrequentlyAskedQuestionUpdateInput {
+	questionEn: String
+	questionAr: String
+
+	answerEn: String
+	answerAr: String
+}
+
+input FrequentlyAskedQuestionOrderByInput {
+	id: OrderDirection
+
+	createdAt: OrderDirection
+}
+
+extend type Query {
+	interpreterRatingOption(where: InterpreterRatingOptionWhereUniqueInput!): InterpreterRatingOption!
+	interpreterRatingOptions(
+		where: InterpreterRatingOptionWhereInput = {}
+		orderBy: [InterpreterRatingOptionOrderByInput!] = [{ createdAt: "desc" }]
+		take: Int = 10
+		skip: Int = 0
+	): [InterpreterRatingOption!]!
+	interpreterRatingOptionsCount(where: InterpreterRatingOptionWhereInput = {}): Int!
+}
+
+extend type Mutation {
+	createInterpreterRatingOption(data: InterpreterRatingOptionCreateInput!): InterpreterRatingOption!
+	updateInterpreterRatingOption(
+		where: InterpreterRatingOptionWhereUniqueInput!
+		data: InterpreterRatingOptionUpdateInput!
+	): InterpreterRatingOption!
+	deleteInterpreterRatingOption(where: InterpreterRatingOptionWhereUniqueInput!): InterpreterRatingOption!
+}
+
+type InterpreterRatingOption {
+	id: ID!
+
+	title: String!
+	titleEn: String!
+	titleAr: String
+
+	ratingVisibleFrom: Float
+	ratingVisibleTo: Float
+
+	ratings: [InterpreterRating!]!
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+input InterpreterRatingOptionWhereUniqueInput {
+	id: ID
+}
+
+input InterpreterRatingOptionWhereInput {
+	AND: [InterpreterRatingOptionWhereInput!]
+	OR: [InterpreterRatingOptionWhereInput!]
+	NOT: [InterpreterRatingOptionWhereInput!]
+	ratingVisibleFrom: FloatNullableFilter
+	ratingVisibleTo: FloatNullableFilter
+	id: IDFilter
+}
+
+input InterpreterRatingOptionCreateInput {
+	titleEn: String!
+	titleAr: String
+	ratingVisibleFrom: Float!
+	ratingVisibleTo: Float!
+}
+
+input InterpreterRatingOptionUpdateInput {
+	titleEn: String
+	titleAr: String
+	ratingVisibleFrom: Float
+	ratingVisibleTo: Float
+}
+
+input InterpreterRatingOptionOrderByInput {
+	id: OrderDirection
+
+	createdAt: OrderDirection
+}
+
+extend type Query {
+	interpreterRating(where: InterpreterRatingWhereUniqueInput!): InterpreterRating!
+	interpreterRatings(
+		where: InterpreterRatingWhereInput = {}
+		orderBy: [InterpreterRatingOrderByInput!] = [{ createdAt: "desc" }]
+		take: Int = 10
+		skip: Int = 0
+	): [InterpreterRating!]!
+	interpreterRatingsCount(where: InterpreterRatingWhereInput = {}): Int!
+}
+
+extend type Mutation {
+	createInterpreterRating(data: InterpreterRatingCreateInput!): InterpreterRating!
+	updateInterpreterRating(
+		where: InterpreterRatingWhereUniqueInput!
+		data: InterpreterRatingUpdateInput!
+	): InterpreterRating!
+	deleteInterpreterRating(where: InterpreterRatingWhereUniqueInput!): InterpreterRating!
+}
+
+type InterpreterRating {
+	id: ID!
+
+	rating: Int!
+	options: [InterpreterRatingOption!]!
+	tellUsMore: String
+	ip: String
+
+	interpreter: Interpreter!
+	user: User
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+input InterpreterRatingWhereUniqueInput {
+	id: ID
+}
+
+input InterpreterRatingWhereInput {
+	AND: [InterpreterRatingWhereInput!]
+	OR: [InterpreterRatingWhereInput!]
+	NOT: [InterpreterRatingWhereInput!]
+	id: IDFilter
+}
+
+input InterpreterRatingCreateInput {
+	interpreter: ID!
+	rating: Int!
+	tellUsMore: String
+	options: [ID!]!
+}
+
+input InterpreterRatingUpdateInput {
+	interpreter: ID
+	rating: Int
+	tellUsMore: String
+	options: [ID!]
+}
+
+input InterpreterRatingOrderByInput {
+	id: OrderDirection
+
+	createdAt: OrderDirection
+}
+
+extend type Query {
+	interpreter(where: InterpreterWhereUniqueInput!): Interpreter!
+	interpreters(
+		where: InterpreterWhereInput = {}
+		orderBy: [InterpreterOrderByInput!] = [{ createdAt: "desc" }]
+		take: Int = 10
+		skip: Int = 0
+	): [Interpreter!]!
+	interpretersCount(where: InterpreterWhereInput = {}): Int!
+	myAvailability: Boolean!
+}
+
+extend type Mutation {
+	approveInterpreter(where: InterpreterWhereUniqueInput!): Interpreter!
+	rejectInterpreter(where: InterpreterWhereUniqueInput!): Interpreter!
+	updateInterpreter(where: InterpreterWhereUniqueInput!, data: InterpreterUpdateInput!): Interpreter!
+	updateMyInterpreter(data: MyInterpreterUpdateInput!): Interpreter!
+	toggleInterpreterAvailability: Boolean!
+	toggleFavoriteInterpreter(where: InterpreterWhereUniqueInput!): Boolean!
+}
+
+enum InterpreterStatus {
+	APPROVED
+	PENDING
+	REJECTED
+}
+
+type InterpreterUser {
+	id: ID!
+	firstName: String!
+	lastName: String!
+	fullName: String
+	image: String
+}
+
+type Interpreter {
+	id: ID!
+
+	languages: [String!]!
+	ratings: [InterpreterRating!]!
+	rating: Float!
+	user: InterpreterUser!
+
+	online: Boolean!
+	approved: Boolean!
+	status: InterpreterStatus!
+	isBusy: Boolean!
+
+	isFavorite: Boolean!
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+input InterpreterWhereUniqueInput {
+	id: ID
+}
+
+input InterpreterWhereInput {
+	AND: [InterpreterWhereInput!]
+	OR: [InterpreterWhereInput!]
+	NOT: [InterpreterWhereInput!]
+	id: IDFilter
+}
+
+input InterpreterUpdateInput {
+	languages: [String!]
+	status: InterpreterStatus
+}
+
+input MyInterpreterUpdateInput {
+	languages: [String!]
+}
+
+input InterpreterOrderByInput {
+	id: OrderDirection
+
+	approved: OrderDirection
+	online: OrderDirection
+
+	createdAt: OrderDirection
+}
+
+extend type Query {
+	maintenanceMode: MessageResponse!
+	compareVersions(data: CompareVersionsInput!): MessageResponse!
+}
+
+extend type Mutation {
+	toggleMaintenanceMode: MessageResponse!
+	submitExpoToken(data: SubmitExpoTokenInput!): MessageResponse!
+	sendNotification(data: SendNotificationInput!): MessageResponse!
+}
+
+input SubmitExpoTokenInput {
+	token: String!
+}
+
+input CompareVersionsInput {
+	version: String!
+}
+
+input SendNotificationInput {
+	title: String!
+	body: String!
+	test: Boolean
+}
+
+extend type Query {
+	notification(where: NotificationWhereUniqueInput!): Notification!
+	notifications(
+		where: NotificationWhereInput = {}
+		orderBy: [NotificationOrderByInput!] = [{ createdAt: "desc" }]
+		take: Int = 10
+		skip: Int = 0
+	): [Notification!]!
+	myNotifications(
+		where: NotificationWhereInput = {}
+		orderBy: [NotificationOrderByInput!] = [{ createdAt: "desc" }]
+		take: Int = 10
+		skip: Int = 0
+	): [Notification!]!
+	notificationsCount(where: NotificationWhereInput = {}): Int!
+	myNotificationsCount(where: NotificationWhereInput = {}): Int!
+}
+
+extend type Mutation {
+	createNotification(data: NotificationCreateInput!): Notification!
+	updateNotification(where: NotificationWhereUniqueInput!, data: NotificationUpdateInput!): Notification!
+	deleteNotification(where: NotificationWhereUniqueInput!): Notification!
+}
+
+type Notification {
+	id: ID!
+
+	title: String!
+	titleEn: String!
+	titleAr: String
+
+	message: String!
+	messageEn: String!
+	messageAr: String
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+input NotificationWhereUniqueInput {
+	id: ID
+}
+
+input NotificationWhereInput {
+	AND: [NotificationWhereInput!]
+	OR: [NotificationWhereInput!]
+	NOT: [NotificationWhereInput!]
+	id: IDFilter
+}
+
+input NotificationCreateInput {
+	titleEn: String!
+	titleAr: String
+
+	messageEn: String!
+	messageAr: String
+}
+
+input NotificationUpdateInput {
+	titleEn: String
+	titleAr: String
+
+	messageEn: String
+	messageAr: String
+}
+
+input NotificationOrderByInput {
+	id: OrderDirection
+
+	createdAt: OrderDirection
+}
+
+extend type Query {
+	latestPrivacyPolicy: PrivacyPolicy!
+	privacyPolicy(where: PrivacyPolicyWhereUniqueInput!): PrivacyPolicy!
+	privacyPolicies(
+		where: PrivacyPolicyWhereInput = {}
+		orderBy: [PrivacyPolicyOrderByInput!] = [{ createdAt: "desc" }]
+		take: Int = 10
+		skip: Int = 0
+	): [PrivacyPolicy!]!
+	privacyPoliciesCount(where: PrivacyPolicyWhereInput = {}): Int!
+}
+
+extend type Mutation {
+	createPrivacyPolicy(data: PrivacyPolicyCreateInput!): PrivacyPolicy!
+	updatePrivacyPolicy(where: PrivacyPolicyWhereUniqueInput!, data: PrivacyPolicyUpdateInput!): PrivacyPolicy!
+	deletePrivacyPolicy(where: PrivacyPolicyWhereUniqueInput!): PrivacyPolicy!
+	acceptPrivacyPolicy(where: PrivacyPolicyWhereUniqueInput!): PrivacyPolicyAcceptance!
+}
+
+type PrivacyPolicyAcceptance {
+	id: ID!
+
+	privacyPolicy: PrivacyPolicy!
+	user: User!
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+type PrivacyPolicy {
+	id: ID!
+
+	content: String!
+	contentEn: String!
+	contentAr: String
+
+	version: Int!
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+input PrivacyPolicyWhereUniqueInput {
+	id: ID
+}
+
+input PrivacyPolicyWhereInput {
+	AND: [PrivacyPolicyWhereInput!]
+	OR: [PrivacyPolicyWhereInput!]
+	NOT: [PrivacyPolicyWhereInput!]
+	id: IDFilter
+}
+
+input PrivacyPolicyCreateInput {
+	contentEn: String!
+	contentAr: String
+}
+
+input PrivacyPolicyUpdateInput {
+	contentEn: String
+	contentAr: String
+}
+
+input PrivacyPolicyOrderByInput {
+	id: OrderDirection
+
+	createdAt: OrderDirection
+}
+
+scalar Upload
+scalar Date
+scalar Null
+scalar NullableString
+scalar NullableNumber
+scalar NullableID
+scalar UntrimmedString
+scalar LowercaseString
+scalar UppercaseString
+scalar EmailAddress
+scalar Password
+scalar OTP
+scalar PhoneNumber
+
+extend type Query {
+	serviceCategory(where: ServiceCategoryWhereUniqueInput!): ServiceCategory!
+	serviceCategories(
+		where: ServiceCategoryWhereInput = {}
+		orderBy: [ServiceCategoryOrderByInput!] = [{ createdAt: "desc" }]
+		take: Int = 10
+		skip: Int = 0
+	): [ServiceCategory!]!
+	serviceCategoriesCount(where: ServiceCategoryWhereInput = {}): Int!
+}
+
+extend type Mutation {
+	createServiceCategory(data: ServiceCategoryCreateInput!): ServiceCategory!
+	updateServiceCategory(where: ServiceCategoryWhereUniqueInput!, data: ServiceCategoryUpdateInput!): ServiceCategory!
+	deleteServiceCategory(where: ServiceCategoryWhereUniqueInput!): ServiceCategory!
+}
+
+type ServiceCategory {
+	id: ID!
+
+	title: String!
+	titleEn: String!
+	titleAr: String
+
+	image: String!
+
+	services: [Service!]
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+input ServiceCategoryWhereUniqueInput {
+	id: ID
+}
+
+input ServiceCategoryWhereInput {
+	AND: [ServiceCategoryWhereInput!]
+	OR: [ServiceCategoryWhereInput!]
+	NOT: [ServiceCategoryWhereInput!]
+	id: IDFilter
+}
+
+input ServiceCategoryCreateInput {
+	titleEn: String!
+	titleAr: String
+
+	image: Upload!
+}
+
+input ServiceCategoryUpdateInput {
+	titleEn: String
+	titleAr: String
+
+	image: Upload
+}
+
+input ServiceCategoryOrderByInput {
+	id: OrderDirection
+	titleEn: OrderDirection
+
+	createdAt: OrderDirection
+}
+
+extend type Query {
+	service(where: ServiceWhereUniqueInput!): Service!
+	services(
+		where: ServiceWhereInput = {}
+		orderBy: [ServiceOrderByInput!] = [{ createdAt: "desc" }]
+		take: Int = 10
+		skip: Int = 0
+	): [Service!]!
+	servicesCount(where: ServiceWhereInput = {}): Int!
+}
+
+extend type Mutation {
+	createService(data: ServiceCreateInput!): Service!
+	updateService(where: ServiceWhereUniqueInput!, data: ServiceUpdateInput!): Service!
+	deleteService(where: ServiceWhereUniqueInput!): Service!
+}
+
+type Service {
+	id: ID!
+
+	name: String!
+	nameEn: String!
+	nameAr: String
+
+	description: String!
+	descriptionEn: String!
+	descriptionAr: String
+
+	phone: String!
+	image: String!
+
+	category: ServiceCategory
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+input ServiceWhereUniqueInput {
+	id: ID
+}
+
+input ServiceWhereInput {
+	AND: [ServiceWhereInput!]
+	OR: [ServiceWhereInput!]
+	NOT: [ServiceWhereInput!]
+	id: IDFilter
+}
+
+input ServiceCreateInput {
+	nameEn: String!
+	nameAr: String
+
+	descriptionEn: String!
+	descriptionAr: String
+
+	phone: PhoneNumber!
+	image: Upload!
+	categoryId: ID!
+}
+
+input ServiceUpdateInput {
+	nameEn: String
+	nameAr: String
+
+	descriptionEn: String
+	descriptionAr: String
+
+	phone: PhoneNumber
+	image: Upload
+	categoryId: ID
+}
+
+input ServiceOrderByInput {
+	id: OrderDirection
+
+	createdAt: OrderDirection
+}
+
+extend type Query {
+	latestTermsOfUse: TermsOfUse!
+	termsOfUse(where: TermsOfUseWhereUniqueInput!): TermsOfUse!
+	termsOfUses(
+		where: TermsOfUseWhereInput = {}
+		orderBy: [TermsOfUseOrderByInput!] = [{ createdAt: "desc" }]
+		take: Int = 10
+		skip: Int = 0
+	): [TermsOfUse!]!
+	termsOfUsesCount(where: TermsOfUseWhereInput = {}): Int!
+}
+
+extend type Mutation {
+	createTermsOfUse(data: TermsOfUseCreateInput!): TermsOfUse!
+	updateTermsOfUse(where: TermsOfUseWhereUniqueInput!, data: TermsOfUseUpdateInput!): TermsOfUse!
+	deleteTermsOfUse(where: TermsOfUseWhereUniqueInput!): TermsOfUse!
+	acceptTermsOfUse(where: TermsOfUseWhereUniqueInput!): TermsOfUseAcceptance!
+}
+
+type TermsOfUseAcceptance {
+	id: ID!
+
+	termsOfUse: TermsOfUse!
+	user: User!
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+type TermsOfUse {
+	id: ID!
+
+	content: String!
+	contentEn: String!
+	contentAr: String
+
+	version: Int!
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+input TermsOfUseWhereUniqueInput {
+	id: ID
+}
+
+input TermsOfUseWhereInput {
+	AND: [TermsOfUseWhereInput!]
+	OR: [TermsOfUseWhereInput!]
+	NOT: [TermsOfUseWhereInput!]
+	id: IDFilter
+}
+
+input TermsOfUseCreateInput {
+	contentEn: String!
+	contentAr: String!
+}
+
+input TermsOfUseUpdateInput {
+	contentEn: String
+	contentAr: String
+}
+
+input TermsOfUseOrderByInput {
+	id: OrderDirection
+
+	createdAt: OrderDirection
+}
+
+extend type Query {
+	myUser: User!
+	user(where: UserWhereUniqueInput!): User!
+	users(
+		where: UserWhereInput = {}
+		orderBy: [UserOrderByInput!] = [{ createdAt: "desc" }]
+		take: Int = 10
+		skip: Int = 0
+	): [User!]!
+	usersCount(where: UserWhereInput = {}): Int!
+
+	myPreferences: UserPreferences!
+}
+
+extend type Mutation {
+	createUser(data: UserCreateInput!): User!
+	updateMyUser(data: MyUserUpdateInput!): User!
+	updateUser(where: UserWhereUniqueInput!, data: UserUpdateInput!): User!
+	deleteMyUser(data: MyUserDeleteInput!): User!
+	deleteUser(where: UserWhereUniqueInput!): User!
+
+	updateMyPreferences(data: MyUserPreferencesUpdateInput!): UserPreferences!
+}
+
+type UserPreferences {
+	id: ID!
+	emailNotifications: Boolean!
+	smsNotifications: Boolean!
+	pushNotifications: Boolean!
+}
+
+enum UserRole {
+	USER
+	INTERPRETER
+	ADMIN
+}
+
+type User {
+	id: ID!
+	firstName: String!
+	lastName: String!
+	fullName: String!
+	cpr: String!
+	email: String!
+	dateOfBirth: Date!
+	language: String!
+	country: String!
+	city: String!
+	mobile: String!
+	gender: Gender!
+	role: UserRole!
+	image: String
+
+	preferences: UserPreferences
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+input UserWhereUniqueInput {
+	id: ID
+	email: EmailAddress
+}
+
+input UserRoleNullableFilter {
+	equals: UserRole
+	in: [UserRole!]
+	notIn: [UserRole!]
+}
+
+input UserWhereInput {
+	AND: [UserWhereInput!]
+	OR: [UserWhereInput!]
+	NOT: [UserWhereInput!]
+	id: IDFilter
+	firstName: StringNullableFilter
+	lastName: StringNullableFilter
+	email: StringNullableFilter
+	role: UserRoleNullableFilter
+}
+
+input UserCreateInput {
+	firstName: String!
+	lastName: String!
+	cpr: String!
+	email: EmailAddress!
+	dateOfBirth: Date!
+	language: UppercaseString!
+	country: String!
+	city: String!
+	mobile: PhoneNumber!
+	gender: Gender!
+	password: Password!
+	role: UserRole
+	image: Upload
+}
+
+input UserUpdateInput {
+	firstName: String
+	lastName: String
+	cpr: String
+	email: EmailAddress
+	dateOfBirth: Date
+	language: UppercaseString
+	country: String
+	city: String
+	mobile: PhoneNumber
+	gender: Gender
+	password: Password
+	role: UserRole
+	image: Upload
+}
+
+input MyUserUpdateInput {
+	firstName: String
+	lastName: String
+	cpr: String
+	email: EmailAddress
+	dateOfBirth: Date
+	language: UppercaseString
+	country: String
+	city: String
+	mobile: PhoneNumber
+	gender: Gender
+	image: Upload
+}
+
+input MyUserPreferencesUpdateInput {
+	emailNotifications: Boolean
+	smsNotifications: Boolean
+	pushNotifications: Boolean
+}
+
+input MyUserDeleteInput {
+	password: String!
+}
+
+input UserOrderByInput {
+	id: OrderDirection
+	firstName: OrderDirection
+	lastName: OrderDirection
+	email: OrderDirection
+	role: OrderDirection
+
+	createdAt: OrderDirection
+}
+
+input UserFilter {
+	firstName: String
+	lastName: String
+	email: EmailAddress
+	role: UserRole
+}

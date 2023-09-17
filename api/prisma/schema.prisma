@@ -1,0 +1,348 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = []
+  binaryTargets   = ["native", "rhel-openssl-1.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  INTERPRETER
+  ADMIN
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+model User {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  lastSeen  DateTime @default(now())
+
+  firstName   String
+  lastName    String
+  cpr         String   @unique
+  email       String   @unique
+  dateOfBirth DateTime
+  language    String
+  country     String
+  city        String
+  mobile      String   @unique
+  gender      Gender
+  password    String
+  role        UserRole @default(USER)
+  image       String?
+
+  deleted Boolean @default(false)
+  active  Boolean @default(false)
+
+  preferences UserPreferences?
+  interpreter Interpreter?
+
+  favoriteInterpreters    Interpreter[]             @relation("FavoriteInterpreters")
+  expoTokens              ExpoToken[]
+  authTokens              AuthToken[]
+  termsOfUseAcceptance    TermsOfUseAcceptance[]
+  privacyPolicyAcceptance PrivacyPolicyAcceptance[]
+  ratings                 InterpreterRating[]
+  notifications           Notification[]
+
+  calls Call[]
+}
+
+model UserPreferences {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  emailNotifications Boolean @default(true)
+  smsNotifications   Boolean @default(true)
+  pushNotifications  Boolean @default(true)
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @unique
+}
+
+enum InterpreterStatus {
+  APPROVED
+  PENDING
+  REJECTED
+}
+
+model Interpreter {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  languages String[]
+  online    Boolean           @default(false)
+  status    InterpreterStatus @default(PENDING)
+
+  favoriteBy User[] @relation("FavoriteInterpreters")
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+
+  ratings InterpreterRating[]
+  calls   Call[]
+}
+
+model InterpreterRating {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  rating     Int
+  tellUsMore String?
+  ip         String
+
+  interpreter   Interpreter @relation(fields: [interpreterId], references: [id], onDelete: Cascade)
+  interpreterId String
+
+  approved Boolean @default(true)
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  options InterpreterRatingOption[]
+}
+
+model InterpreterRatingOption {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  titleEn String
+  titleAr String?
+
+  ratingVisibleFrom Float
+  ratingVisibleTo   Float
+
+  ratings InterpreterRating[]
+}
+
+enum CallStatus {
+  CALLING
+  ANSWERED
+  FAILED
+  ENDED
+  REJECTED
+}
+
+model Call {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  from   User   @relation(fields: [fromId], references: [id], onDelete: Cascade)
+  fromId String
+
+  to   Interpreter @relation(fields: [toId], references: [id], onDelete: Cascade)
+  toId String
+
+  service   Service? @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  serviceId String?
+
+  roomID String?
+
+  startedAt       DateTime?
+  endedAt         DateTime?
+  serviceCalledAt DateTime?
+  serviceEndedAt  DateTime?
+
+  status CallStatus @default(CALLING)
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  titleEn String
+  titleAr String?
+
+  messageEn String
+  messageAr String?
+
+  users User[]
+}
+
+model Advertisement {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  titleEn String
+  titleAr String?
+
+  contentEn String
+  contentAr String?
+
+  image    String
+  url      String?
+  duration Int     @default(5)
+  active   Boolean @default(false)
+  views    Int     @default(0)
+}
+
+model TermsOfUse {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  contentEn String
+  contentAr String?
+
+  version Int @default(autoincrement())
+
+  termsOfUseAcceptance TermsOfUseAcceptance[]
+}
+
+model TermsOfUseAcceptance {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  termsOfUse   TermsOfUse @relation(fields: [termsOfUseId], references: [id], onDelete: Cascade)
+  termsOfUseId String
+}
+
+model PrivacyPolicy {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  contentEn String
+  contentAr String?
+
+  version Int @default(autoincrement())
+
+  privacyPolicyAcceptance PrivacyPolicyAcceptance[]
+}
+
+model PrivacyPolicyAcceptance {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  privacyPolicy   PrivacyPolicy @relation(fields: [privacyPolicyId], references: [id], onDelete: Cascade)
+  privacyPolicyId String
+}
+
+model ExpoToken {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  token String @unique
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+}
+
+model Service {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  nameEn String
+  nameAr String?
+
+  descriptionEn String
+  descriptionAr String?
+
+  phone String
+  image String
+
+  category   ServiceCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  categoryId String?
+  calls      Call[]
+}
+
+model ServiceCategory {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  titleEn String
+  titleAr String?
+
+  image String
+
+  services Service[]
+}
+
+model FrequentlyAskedQuestion {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  questionEn String
+  questionAr String?
+
+  answerEn String
+  answerAr String?
+}
+
+model About {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  contentEn String
+  contentAr String?
+
+  version Int @default(autoincrement())
+}
+
+enum OneTimePasswordOperation {
+  RESET_PASSWORD
+  VERIFY_EMAIL
+}
+
+model OneTimePassword {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  code      String                   @unique
+  email     String
+  operation OneTimePasswordOperation
+  helper    String?
+  expired   Boolean                  @default(false)
+}
+
+model Config {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  maintenanceMode Boolean @default(false)
+  minimumVersion  String?
+  outboundNumber  String?
+}
+
+model AuthToken {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  token  String @unique
+  device String @default("unknown")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+}

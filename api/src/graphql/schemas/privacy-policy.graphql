@@ -1,0 +1,68 @@
+extend type Query {
+	latestPrivacyPolicy: PrivacyPolicy!
+	privacyPolicy(where: PrivacyPolicyWhereUniqueInput!): PrivacyPolicy!
+	privacyPolicies(
+		where: PrivacyPolicyWhereInput = {}
+		orderBy: [PrivacyPolicyOrderByInput!] = [{ createdAt: "desc" }]
+		take: Int = 10
+		skip: Int = 0
+	): [PrivacyPolicy!]!
+	privacyPoliciesCount(where: PrivacyPolicyWhereInput = {}): Int!
+}
+
+extend type Mutation {
+	createPrivacyPolicy(data: PrivacyPolicyCreateInput!): PrivacyPolicy!
+	updatePrivacyPolicy(where: PrivacyPolicyWhereUniqueInput!, data: PrivacyPolicyUpdateInput!): PrivacyPolicy!
+	deletePrivacyPolicy(where: PrivacyPolicyWhereUniqueInput!): PrivacyPolicy!
+	acceptPrivacyPolicy(where: PrivacyPolicyWhereUniqueInput!): PrivacyPolicyAcceptance!
+}
+
+type PrivacyPolicyAcceptance {
+	id: ID!
+
+	privacyPolicy: PrivacyPolicy!
+	user: User!
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+type PrivacyPolicy {
+	id: ID!
+
+	content: String!
+	contentEn: String!
+	contentAr: String
+
+	version: Int!
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+input PrivacyPolicyWhereUniqueInput {
+	id: ID
+}
+
+input PrivacyPolicyWhereInput {
+	AND: [PrivacyPolicyWhereInput!]
+	OR: [PrivacyPolicyWhereInput!]
+	NOT: [PrivacyPolicyWhereInput!]
+	id: IDFilter
+}
+
+input PrivacyPolicyCreateInput {
+	contentEn: String!
+	contentAr: String
+}
+
+input PrivacyPolicyUpdateInput {
+	contentEn: String
+	contentAr: String
+}
+
+input PrivacyPolicyOrderByInput {
+	id: OrderDirection
+
+	createdAt: OrderDirection
+}

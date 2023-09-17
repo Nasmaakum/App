@@ -1,0 +1,65 @@
+extend type Query {
+	interpreterRating(where: InterpreterRatingWhereUniqueInput!): InterpreterRating!
+	interpreterRatings(
+		where: InterpreterRatingWhereInput = {}
+		orderBy: [InterpreterRatingOrderByInput!] = [{ createdAt: "desc" }]
+		take: Int = 10
+		skip: Int = 0
+	): [InterpreterRating!]!
+	interpreterRatingsCount(where: InterpreterRatingWhereInput = {}): Int!
+}
+
+extend type Mutation {
+	createInterpreterRating(data: InterpreterRatingCreateInput!): InterpreterRating!
+	updateInterpreterRating(
+		where: InterpreterRatingWhereUniqueInput!
+		data: InterpreterRatingUpdateInput!
+	): InterpreterRating!
+	deleteInterpreterRating(where: InterpreterRatingWhereUniqueInput!): InterpreterRating!
+}
+
+type InterpreterRating {
+	id: ID!
+
+	rating: Int!
+	options: [InterpreterRatingOption!]!
+	tellUsMore: String
+	ip: String
+
+	interpreter: Interpreter!
+	user: User
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+input InterpreterRatingWhereUniqueInput {
+	id: ID
+}
+
+input InterpreterRatingWhereInput {
+	AND: [InterpreterRatingWhereInput!]
+	OR: [InterpreterRatingWhereInput!]
+	NOT: [InterpreterRatingWhereInput!]
+	id: IDFilter
+}
+
+input InterpreterRatingCreateInput {
+	interpreter: ID!
+	rating: Int!
+	tellUsMore: String
+	options: [ID!]!
+}
+
+input InterpreterRatingUpdateInput {
+	interpreter: ID
+	rating: Int
+	tellUsMore: String
+	options: [ID!]
+}
+
+input InterpreterRatingOrderByInput {
+	id: OrderDirection
+
+	createdAt: OrderDirection
+}

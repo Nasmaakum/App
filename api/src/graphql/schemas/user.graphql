@@ -1,0 +1,153 @@
+extend type Query {
+	myUser: User!
+	user(where: UserWhereUniqueInput!): User!
+	users(
+		where: UserWhereInput = {}
+		orderBy: [UserOrderByInput!] = [{ createdAt: "desc" }]
+		take: Int = 10
+		skip: Int = 0
+	): [User!]!
+	usersCount(where: UserWhereInput = {}): Int!
+
+	myPreferences: UserPreferences!
+}
+
+extend type Mutation {
+	createUser(data: UserCreateInput!): User!
+	updateMyUser(data: MyUserUpdateInput!): User!
+	updateUser(where: UserWhereUniqueInput!, data: UserUpdateInput!): User!
+	deleteMyUser(data: MyUserDeleteInput!): User!
+	deleteUser(where: UserWhereUniqueInput!): User!
+
+	updateMyPreferences(data: MyUserPreferencesUpdateInput!): UserPreferences!
+}
+
+type UserPreferences {
+	id: ID!
+	emailNotifications: Boolean!
+	smsNotifications: Boolean!
+	pushNotifications: Boolean!
+}
+
+enum UserRole {
+	USER
+	INTERPRETER
+	ADMIN
+}
+
+type User {
+	id: ID!
+	firstName: String!
+	lastName: String!
+	fullName: String!
+	cpr: String!
+	email: String!
+	dateOfBirth: Date!
+	language: String!
+	country: String!
+	city: String!
+	mobile: String!
+	gender: Gender!
+	role: UserRole!
+	image: String
+
+	preferences: UserPreferences
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+input UserWhereUniqueInput {
+	id: ID
+	email: EmailAddress
+}
+
+input UserRoleNullableFilter {
+	equals: UserRole
+	in: [UserRole!]
+	notIn: [UserRole!]
+}
+
+input UserWhereInput {
+	AND: [UserWhereInput!]
+	OR: [UserWhereInput!]
+	NOT: [UserWhereInput!]
+	id: IDFilter
+	firstName: StringNullableFilter
+	lastName: StringNullableFilter
+	email: StringNullableFilter
+	role: UserRoleNullableFilter
+}
+
+input UserCreateInput {
+	firstName: String!
+	lastName: String!
+	cpr: String!
+	email: EmailAddress!
+	dateOfBirth: Date!
+	language: UppercaseString!
+	country: String!
+	city: String!
+	mobile: PhoneNumber!
+	gender: Gender!
+	password: Password!
+	role: UserRole
+	image: Upload
+}
+
+input UserUpdateInput {
+	firstName: String
+	lastName: String
+	cpr: String
+	email: EmailAddress
+	dateOfBirth: Date
+	language: UppercaseString
+	country: String
+	city: String
+	mobile: PhoneNumber
+	gender: Gender
+	password: Password
+	role: UserRole
+	image: Upload
+}
+
+input MyUserUpdateInput {
+	firstName: String
+	lastName: String
+	cpr: String
+	email: EmailAddress
+	dateOfBirth: Date
+	language: UppercaseString
+	country: String
+	city: String
+	mobile: PhoneNumber
+	gender: Gender
+	image: Upload
+}
+
+input MyUserPreferencesUpdateInput {
+	emailNotifications: Boolean
+	smsNotifications: Boolean
+	pushNotifications: Boolean
+}
+
+input MyUserDeleteInput {
+	password: String!
+}
+
+input UserOrderByInput {
+	id: OrderDirection
+	firstName: OrderDirection
+	lastName: OrderDirection
+	email: OrderDirection
+	role: OrderDirection
+
+	createdAt: OrderDirection
+}
+
+input UserFilter {
+	firstName: String
+	lastName: String
+	email: EmailAddress
+	role: UserRole
+}

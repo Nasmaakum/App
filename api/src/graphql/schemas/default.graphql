@@ -1,0 +1,128 @@
+type Query {
+	_empty: String
+}
+
+type Mutation {
+	_empty: String
+}
+
+input IDFilter {
+	equals: ID
+	in: [ID!]
+	notIn: [ID!]
+	lt: ID
+	lte: ID
+	gt: ID
+	gte: ID
+	not: IDFilter
+}
+
+input RelationshipNullableFilter {
+	id: ID
+	is: Null
+	isNot: Null
+}
+
+input ArrayNullableFilter {
+	equals: [String!]
+	hasSome: [String!]
+	hasEvery: [String!]
+	has: String
+	isEmpty: Boolean
+}
+
+input StringNullableFilter {
+	equals: String
+	in: [String!]
+	notIn: [String!]
+	lt: String
+	lte: String
+	gt: String
+	gte: String
+	contains: String
+	startsWith: String
+	endsWith: String
+	mode: QueryMode
+	not: NestedStringNullableFilter
+}
+
+input NestedStringNullableFilter {
+	equals: String
+	in: [String!]
+	notIn: [String!]
+	lt: String
+	lte: String
+	gt: String
+	gte: String
+	contains: String
+	startsWith: String
+	endsWith: String
+	not: NestedStringNullableFilter
+}
+
+input IntNullableFilter {
+	equals: Int
+	in: [Int!]
+	notIn: [Int!]
+	lt: Int
+	lte: Int
+	gt: Int
+	gte: Int
+	not: NestedIntNullableFilter
+}
+
+input NestedIntNullableFilter {
+	equals: Int
+	in: [Int!]
+	notIn: [Int!]
+	lt: Int
+	lte: Int
+	gt: Int
+	gte: Int
+	not: NestedIntNullableFilter
+}
+
+input FloatNullableFilter {
+	equals: Float
+	in: [Float!]
+	notIn: [Float!]
+	lt: Float
+	lte: Float
+	gt: Float
+	gte: Float
+	not: NestedFloatNullableFilter
+}
+
+input NestedFloatNullableFilter {
+	equals: Float
+	in: [Float!]
+	notIn: [Float!]
+	lt: Float
+	lte: Float
+	gt: Float
+	gte: Float
+	not: NestedFloatNullableFilter
+}
+
+enum QueryMode {
+	default
+	insensitive
+}
+
+enum OrderDirection {
+	asc
+	desc
+}
+
+type BatchPayload {
+	count: Int!
+}
+
+enum Gender {
+	MALE
+	FEMALE
+}
+
+type MessageResponse {
+	message: String!
+}

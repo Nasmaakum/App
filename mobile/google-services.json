@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "772659994947",
+    "project_id": "nasmaakum-9676c",
+    "storage_bucket": "nasmaakum-9676c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:772659994947:android:28270838c895fc2c06cff6",
+        "android_client_info": {
+          "package_name": "com.invitabpo.nasmaakum"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "772659994947-k1flh4rpu18nuvbo9of6viidosut8fqg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsqHO2048nGXUSPNdEiYJt8xk5YsfdjXQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "772659994947-k1flh4rpu18nuvbo9of6viidosut8fqg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

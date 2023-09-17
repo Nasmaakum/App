@@ -1,0 +1,77 @@
+extend type Query {
+	service(where: ServiceWhereUniqueInput!): Service!
+	services(
+		where: ServiceWhereInput = {}
+		orderBy: [ServiceOrderByInput!] = [{ createdAt: "desc" }]
+		take: Int = 10
+		skip: Int = 0
+	): [Service!]!
+	servicesCount(where: ServiceWhereInput = {}): Int!
+}
+
+extend type Mutation {
+	createService(data: ServiceCreateInput!): Service!
+	updateService(where: ServiceWhereUniqueInput!, data: ServiceUpdateInput!): Service!
+	deleteService(where: ServiceWhereUniqueInput!): Service!
+}
+
+type Service {
+	id: ID!
+
+	name: String!
+	nameEn: String!
+	nameAr: String
+
+	description: String!
+	descriptionEn: String!
+	descriptionAr: String
+
+	phone: String!
+	image: String!
+
+	category: ServiceCategory
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+input ServiceWhereUniqueInput {
+	id: ID
+}
+
+input ServiceWhereInput {
+	AND: [ServiceWhereInput!]
+	OR: [ServiceWhereInput!]
+	NOT: [ServiceWhereInput!]
+	id: IDFilter
+}
+
+input ServiceCreateInput {
+	nameEn: String!
+	nameAr: String
+
+	descriptionEn: String!
+	descriptionAr: String
+
+	phone: PhoneNumber!
+	image: Upload!
+	categoryId: ID!
+}
+
+input ServiceUpdateInput {
+	nameEn: String
+	nameAr: String
+
+	descriptionEn: String
+	descriptionAr: String
+
+	phone: PhoneNumber
+	image: Upload
+	categoryId: ID
+}
+
+input ServiceOrderByInput {
+	id: OrderDirection
+
+	createdAt: OrderDirection
+}

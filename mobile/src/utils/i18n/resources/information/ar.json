@@ -1,0 +1,8 @@
+{
+	"terms-of-use": "شروط الإستخدام - النسخة {{version}}",
+	"privacy-policy": "سياسة الخصوصية - النسخة {{version}}",
+	"accept": "قبول",
+	"privacy-policy-accepted": "تم قبول سياسة الخصوصية",
+	"terms-of-use-accepted": "تم قبول شروط الإستخدام",
+	"network-request-failed": "فشل طلب الشبكة"
+}

@@ -1,0 +1,24 @@
+extend type Query {
+	maintenanceMode: MessageResponse!
+	compareVersions(data: CompareVersionsInput!): MessageResponse!
+}
+
+extend type Mutation {
+	toggleMaintenanceMode: MessageResponse!
+	submitExpoToken(data: SubmitExpoTokenInput!): MessageResponse!
+	sendNotification(data: SendNotificationInput!): MessageResponse!
+}
+
+input SubmitExpoTokenInput {
+	token: String!
+}
+
+input CompareVersionsInput {
+	version: String!
+}
+
+input SendNotificationInput {
+	title: String!
+	body: String!
+	test: Boolean
+}

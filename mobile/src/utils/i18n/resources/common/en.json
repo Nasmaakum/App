@@ -1,0 +1,23 @@
+{
+	"home": "Home",
+	"appointments": "Appointments",
+	"my-profile": "My Profile",
+	"availability": "Availability",
+	"notifications": "Notifications",
+	"settings": "Settings",
+	"terms-of-use": "Terms of Use",
+	"privacy-policy": "Privacy Policy",
+	"logout": "Logout",
+	"skip": "Skip",
+	"next": "Next",
+	"6-characters-or-more": "6 characters or more",
+	"uppercase-letter": "Uppercase letter",
+	"lowercase-letter": "Lowercase letter",
+	"special-character": "Special character",
+	"numeric-character": "Numeric character",
+	"are-you-sure-you-want-to-logout-question": "Are you sure you want to logout?",
+	"cancel": "Cancel",
+	"skip-all": "Skip All",
+	"help": "Help",
+	"please-login-again": "Please login again"
+}

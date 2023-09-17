@@ -1,0 +1,67 @@
+extend type Query {
+	frequentlyAskedQuestion(where: FrequentlyAskedQuestionWhereUniqueInput!): FrequentlyAskedQuestion!
+	frequentlyAskedQuestions(
+		where: FrequentlyAskedQuestionWhereInput = {}
+		orderBy: [FrequentlyAskedQuestionOrderByInput!] = [{ createdAt: "desc" }]
+		take: Int = 10
+		skip: Int = 0
+	): [FrequentlyAskedQuestion!]!
+	frequentlyAskedQuestionsCount(where: FrequentlyAskedQuestionWhereInput = {}): Int!
+}
+
+extend type Mutation {
+	createFrequentlyAskedQuestion(data: FrequentlyAskedQuestionCreateInput!): FrequentlyAskedQuestion!
+	updateFrequentlyAskedQuestion(
+		where: FrequentlyAskedQuestionWhereUniqueInput!
+		data: FrequentlyAskedQuestionUpdateInput!
+	): FrequentlyAskedQuestion!
+	deleteFrequentlyAskedQuestion(where: FrequentlyAskedQuestionWhereUniqueInput!): FrequentlyAskedQuestion!
+}
+
+type FrequentlyAskedQuestion {
+	id: ID!
+
+	question: String!
+	questionEn: String!
+	questionAr: String
+
+	answer: String!
+	answerEn: String!
+	answerAr: String
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+input FrequentlyAskedQuestionWhereUniqueInput {
+	id: ID
+}
+
+input FrequentlyAskedQuestionWhereInput {
+	AND: [FrequentlyAskedQuestionWhereInput!]
+	OR: [FrequentlyAskedQuestionWhereInput!]
+	NOT: [FrequentlyAskedQuestionWhereInput!]
+	id: IDFilter
+}
+
+input FrequentlyAskedQuestionCreateInput {
+	questionEn: String!
+	questionAr: String
+
+	answerEn: String!
+	answerAr: String
+}
+
+input FrequentlyAskedQuestionUpdateInput {
+	questionEn: String
+	questionAr: String
+
+	answerEn: String
+	answerAr: String
+}
+
+input FrequentlyAskedQuestionOrderByInput {
+	id: OrderDirection
+
+	createdAt: OrderDirection
+}

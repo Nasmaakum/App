@@ -1,0 +1,63 @@
+extend type Query {
+	serviceCategory(where: ServiceCategoryWhereUniqueInput!): ServiceCategory!
+	serviceCategories(
+		where: ServiceCategoryWhereInput = {}
+		orderBy: [ServiceCategoryOrderByInput!] = [{ createdAt: "desc" }]
+		take: Int = 10
+		skip: Int = 0
+	): [ServiceCategory!]!
+	serviceCategoriesCount(where: ServiceCategoryWhereInput = {}): Int!
+}
+
+extend type Mutation {
+	createServiceCategory(data: ServiceCategoryCreateInput!): ServiceCategory!
+	updateServiceCategory(where: ServiceCategoryWhereUniqueInput!, data: ServiceCategoryUpdateInput!): ServiceCategory!
+	deleteServiceCategory(where: ServiceCategoryWhereUniqueInput!): ServiceCategory!
+}
+
+type ServiceCategory {
+	id: ID!
+
+	title: String!
+	titleEn: String!
+	titleAr: String
+
+	image: String!
+
+	services: [Service!]
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+input ServiceCategoryWhereUniqueInput {
+	id: ID
+}
+
+input ServiceCategoryWhereInput {
+	AND: [ServiceCategoryWhereInput!]
+	OR: [ServiceCategoryWhereInput!]
+	NOT: [ServiceCategoryWhereInput!]
+	id: IDFilter
+}
+
+input ServiceCategoryCreateInput {
+	titleEn: String!
+	titleAr: String
+
+	image: Upload!
+}
+
+input ServiceCategoryUpdateInput {
+	titleEn: String
+	titleAr: String
+
+	image: Upload
+}
+
+input ServiceCategoryOrderByInput {
+	id: OrderDirection
+	titleEn: OrderDirection
+
+	createdAt: OrderDirection
+}

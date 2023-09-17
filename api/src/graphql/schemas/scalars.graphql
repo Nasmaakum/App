@@ -1,0 +1,13 @@
+scalar Upload
+scalar Date
+scalar Null
+scalar NullableString
+scalar NullableNumber
+scalar NullableID
+scalar UntrimmedString
+scalar LowercaseString
+scalar UppercaseString
+scalar EmailAddress
+scalar Password
+scalar OTP
+scalar PhoneNumber

@@ -1,0 +1,85 @@
+service: sls-nasmaakum-api
+useDotenv: true
+provider:
+  name: aws
+  runtime: nodejs16.x
+  region: me-south-1
+  stage: prod
+  profile: nasmaakum
+  apiGateway:
+    binaryMediaTypes:
+      - multipart/form-data
+  deploymentMethod: direct
+  httpApi:
+    cors:
+      allowedOrigins:
+        - '*'
+      allowedHeaders:
+        - '*'
+      allowedMethods:
+        - '*'
+      allowCredentials: false
+      maxAge: 86400
+    payload: '1.0'
+    disableDefaultEndpoint: false
+functions:
+  graphql:
+    handler: src/index.serverHandler
+    events:
+      - httpApi:
+          path: /
+          method: post
+      - httpApi:
+          path: /
+          method: options
+  redirect:
+    handler: src/redirect.redirectHandler
+    events:
+      - httpApi:
+          path: /
+          method: get
+  cronOneHour:
+    handler: src/cron-jobs.oneHour
+    events:
+      - schedule: rate(1 hour)
+  cronOneDay:
+    handler: src/cron-jobs.oneDay
+    events:
+      - schedule: rate(1 day)
+  cronTenMinutes:
+    handler: src/cron-jobs.tenMinutes
+    events:
+      - schedule: rate(10 minutes)
+  cronOneMinute:
+    handler: src/cron-jobs.oneMinute
+    events:
+      - schedule: rate(1 minute)
+plugins:
+  - serverless-domain-manager
+  - serverless-webpack
+  - serverless-dotenv-plugin
+  - serverless-plugin-monorepo
+  - serverless-webpack-prisma
+  - serverless-api-gateway-throttling
+custom:
+  includeDependencies: true
+  webpack:
+    includeModules:
+      forceInclude:
+        - prisma
+      forceExclude:
+        - apollo-server-express
+    packager: 'yarn'
+    packagerOptions:
+      scripts:
+        - npx prisma generate
+  customDomain:
+    domainName: api.nasmaakum.com
+    basePath: ''
+    createRoute53Record: true
+    stage: ${self:provider.stage}
+    apiType: http
+    endpointType: regional
+  apiGatewayThrottling:
+    maxRequestsPerSecond: 2000
+    maxConcurrentRequests: 500

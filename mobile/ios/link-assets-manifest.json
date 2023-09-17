@@ -1,0 +1,13 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/Janna LT Bold.ttf",
+      "sha1": "263ca5c8cc577834c1211b306875894dd22d8c45"
+    },
+    {
+      "path": "src/assets/fonts/Janna LT Regular.ttf",
+      "sha1": "4c492e3f7ac90dc89231ca18b51318acb2dfaf79"
+    }
+  ]
+}

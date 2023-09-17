@@ -1,0 +1,68 @@
+extend type Query {
+	interpreterRatingOption(where: InterpreterRatingOptionWhereUniqueInput!): InterpreterRatingOption!
+	interpreterRatingOptions(
+		where: InterpreterRatingOptionWhereInput = {}
+		orderBy: [InterpreterRatingOptionOrderByInput!] = [{ createdAt: "desc" }]
+		take: Int = 10
+		skip: Int = 0
+	): [InterpreterRatingOption!]!
+	interpreterRatingOptionsCount(where: InterpreterRatingOptionWhereInput = {}): Int!
+}
+
+extend type Mutation {
+	createInterpreterRatingOption(data: InterpreterRatingOptionCreateInput!): InterpreterRatingOption!
+	updateInterpreterRatingOption(
+		where: InterpreterRatingOptionWhereUniqueInput!
+		data: InterpreterRatingOptionUpdateInput!
+	): InterpreterRatingOption!
+	deleteInterpreterRatingOption(where: InterpreterRatingOptionWhereUniqueInput!): InterpreterRatingOption!
+}
+
+type InterpreterRatingOption {
+	id: ID!
+
+	title: String!
+	titleEn: String!
+	titleAr: String
+
+	ratingVisibleFrom: Float
+	ratingVisibleTo: Float
+
+	ratings: [InterpreterRating!]!
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+input InterpreterRatingOptionWhereUniqueInput {
+	id: ID
+}
+
+input InterpreterRatingOptionWhereInput {
+	AND: [InterpreterRatingOptionWhereInput!]
+	OR: [InterpreterRatingOptionWhereInput!]
+	NOT: [InterpreterRatingOptionWhereInput!]
+	ratingVisibleFrom: FloatNullableFilter
+	ratingVisibleTo: FloatNullableFilter
+	id: IDFilter
+}
+
+input InterpreterRatingOptionCreateInput {
+	titleEn: String!
+	titleAr: String
+	ratingVisibleFrom: Float!
+	ratingVisibleTo: Float!
+}
+
+input InterpreterRatingOptionUpdateInput {
+	titleEn: String
+	titleAr: String
+	ratingVisibleFrom: Float
+	ratingVisibleTo: Float
+}
+
+input InterpreterRatingOptionOrderByInput {
+	id: OrderDirection
+
+	createdAt: OrderDirection
+}

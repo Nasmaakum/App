@@ -1,0 +1,23 @@
+{
+	"home": "الرئيسية",
+	"appointments": "المواعيد",
+	"my-profile": "ملفي الشخصي",
+	"availability": "التوافر",
+	"notifications": "الإشعارات",
+	"settings": "الإعدادات",
+	"terms-of-use": "شروط الإستخدام",
+	"privacy-policy": "سياسة الخصوصية",
+	"logout": "تسجيل الخروج",
+	"skip": "تخطى",
+	"next": "التالي",
+	"6-characters-or-more": "6 أحرف أو أكثر",
+	"uppercase-letter": "حرف كبير",
+	"lowercase-letter": "حرف صغير",
+	"special-character": "حرف مميز",
+	"numeric-character": "رقم",
+	"are-you-sure-you-want-to-logout-question": "هل أنت متأكد من أنك تريد تسجيل الخروج؟",
+	"cancel": "إلغاء",
+	"skip-all": "تخطى الكل",
+	"help": "مساعدة",
+	"please-login-again": "الرجاء تسجيل الدخول مرة أخرى"
+}

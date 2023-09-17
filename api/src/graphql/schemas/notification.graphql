@@ -1,0 +1,71 @@
+extend type Query {
+	notification(where: NotificationWhereUniqueInput!): Notification!
+	notifications(
+		where: NotificationWhereInput = {}
+		orderBy: [NotificationOrderByInput!] = [{ createdAt: "desc" }]
+		take: Int = 10
+		skip: Int = 0
+	): [Notification!]!
+	myNotifications(
+		where: NotificationWhereInput = {}
+		orderBy: [NotificationOrderByInput!] = [{ createdAt: "desc" }]
+		take: Int = 10
+		skip: Int = 0
+	): [Notification!]!
+	notificationsCount(where: NotificationWhereInput = {}): Int!
+	myNotificationsCount(where: NotificationWhereInput = {}): Int!
+}
+
+extend type Mutation {
+	createNotification(data: NotificationCreateInput!): Notification!
+	updateNotification(where: NotificationWhereUniqueInput!, data: NotificationUpdateInput!): Notification!
+	deleteNotification(where: NotificationWhereUniqueInput!): Notification!
+}
+
+type Notification {
+	id: ID!
+
+	title: String!
+	titleEn: String!
+	titleAr: String
+
+	message: String!
+	messageEn: String!
+	messageAr: String
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+input NotificationWhereUniqueInput {
+	id: ID
+}
+
+input NotificationWhereInput {
+	AND: [NotificationWhereInput!]
+	OR: [NotificationWhereInput!]
+	NOT: [NotificationWhereInput!]
+	id: IDFilter
+}
+
+input NotificationCreateInput {
+	titleEn: String!
+	titleAr: String
+
+	messageEn: String!
+	messageAr: String
+}
+
+input NotificationUpdateInput {
+	titleEn: String
+	titleAr: String
+
+	messageEn: String
+	messageAr: String
+}
+
+input NotificationOrderByInput {
+	id: OrderDirection
+
+	createdAt: OrderDirection
+}

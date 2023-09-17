@@ -1,0 +1,8 @@
+{
+	"terms-of-use": "Terms of Use - V {{version}}",
+	"privacy-policy": "Privacy Policy - V {{version}}",
+	"accept": "Accept",
+	"privacy-policy-accepted": "Privacy Policy accepted",
+	"terms-of-use-accepted": "Terms of Use accepted",
+	"network-request-failed": "Network request failed"
+}

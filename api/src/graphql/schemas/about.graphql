@@ -1,0 +1,57 @@
+extend type Query {
+	latestAbout: About!
+	about(where: AboutWhereUniqueInput!): About!
+	abouts(
+		where: AboutWhereInput = {}
+		orderBy: [AboutOrderByInput!] = [{ createdAt: "desc" }]
+		take: Int = 10
+		skip: Int = 0
+	): [About!]!
+	aboutsCount(where: AboutWhereInput = {}): Int!
+}
+
+extend type Mutation {
+	createAbout(data: AboutCreateInput!): About!
+	updateAbout(where: AboutWhereUniqueInput!, data: AboutUpdateInput!): About!
+	deleteAbout(where: AboutWhereUniqueInput!): About!
+}
+
+type About {
+	id: ID!
+
+	content: String
+	contentEn: String!
+	contentAr: String
+
+	version: Int!
+
+	createdAt: Date!
+	updatedAt: Date!
+}
+
+input AboutWhereUniqueInput {
+	id: ID
+}
+
+input AboutWhereInput {
+	AND: [AboutWhereInput!]
+	OR: [AboutWhereInput!]
+	NOT: [AboutWhereInput!]
+	id: IDFilter
+}
+
+input AboutCreateInput {
+	contentEn: String!
+	contentAr: String
+}
+
+input AboutUpdateInput {
+	contentEn: String
+	contentAr: String
+}
+
+input AboutOrderByInput {
+	id: OrderDirection
+
+	createdAt: OrderDirection
+}
